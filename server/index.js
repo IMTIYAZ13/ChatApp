@@ -1,20 +1,16 @@
-const express= require("express");
-const bodyParser =require("body-parser");
-const app = express()
+const router = require('./Router/router')
+const express = require('express');
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
-app.use(bodyParser.json({extended : true }));
-app.use(bodyParser.urlencoded({extended:true}))
+const app = express();
+app.use(bodyParser.urlencoded({extended: true}));
+app.use(bodyParser.json({extended: true}));
+app.use(cors());
 
-const PORT =process.env.port || 8000;
+// Router
+app.use('/api', router);
 
-app.get("/",function(req,res)
-{
-    const data={
-        "no_user" :25
-    };
-    res.send(data);
-});
-
-app.listen(PORT,()=>{
-    console.log(`server is running at ${PORT}`  )
+app.listen(8000, () => {
+    console.log('Server up @ 8000');
 });
