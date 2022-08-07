@@ -1,16 +1,7 @@
 import * as React from 'react';
-import Box from '@mui/material/Box';
-import Card from '@mui/material/Card';
-import CardActions from '@mui/material/CardActions';
-import CardContent from '@mui/material/CardContent';
-import Button from '@mui/material/Button';
-import Typography from '@mui/material/Typography';
 import { useParams } from 'react-router-dom';
-import DNE from "../DNE/dne";
-import Meet from './Card/card';
 import MeetCard from './Card/card';
-
-var code_response = null;
+import DNE from "../DNE/dne";
 
 const Room = () => {
 
@@ -33,7 +24,7 @@ const Room = () => {
         );
     } else {
         return (
-           <MeetCard/>
+            <MeetCard/>
         );
     }
 };

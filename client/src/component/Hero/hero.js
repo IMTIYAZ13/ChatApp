@@ -15,7 +15,7 @@ const Hero = () => {
     });
 
     const handleClick = () => {
-        fetch('http://localhost:8000/api/get-code/')
+        fetch('/api/get-code/')
             .then((response) => response.json())
             .then((data) => {
                 console.log(data);
