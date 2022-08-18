@@ -1,5 +1,7 @@
 const bcrypt = require("bcryptjs")
+const jwt = require('jsonwebtoken');
 const { User } = require("../Models/user.model");
+require('dotenv').config({path:__dirname+'/../../../.env'});
 
 module.exports.registerUser = async (req, res) => {
     // console.log(req.body);
@@ -19,8 +21,7 @@ module.exports.registerUser = async (req, res) => {
 
 module.exports.loginUser = async (req, res) => {
 
-    console.log(req.body);
-
+    // console.log(req.body);
     const db_user = await User.findOne({
         username: req.body.username,
     });
@@ -37,6 +38,22 @@ module.exports.loginUser = async (req, res) => {
     }
 
     console.log("Login successful...")
-    console.log("Create a JWT")
-    return res.json({ status: "ok" });
+
+    const payload = {
+        username: db_user.username,
+        iat: Date.now(),
+    }
+    // console.log(payload)
+    const token = jwt.sign(payload, process.env.JWT_SECRET);
+    // console.log(token);
+
+    return res.json({ status: "ok", token: token });
+}
+
+module.exports.verifyUser = (req, res) => {
+    const token = req.body.token;
+    console.log(token);
+    const payload = jwt.verify(token, process.env.JWT_SECRET);
+    console.log(payload);
+    return res.json({"payload": payload});
 }
