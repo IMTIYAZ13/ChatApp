@@ -2,6 +2,10 @@ import * as React from 'react';
 import { useParams } from 'react-router-dom';
 import MeetCard from './Card/card';
 import DNE from "../DNE/dne";
+import { useState, useEffect } from 'react';
+import io from 'socket.io-client';
+
+const socket = io('/');
 
 const Room = () => {
 
@@ -17,6 +21,18 @@ const Room = () => {
     // send the request
     xhr.send(JSON.stringify({"code": code}));
 
+    socket.emit("join_room", code);
+    socket.emit("send_message", { message: 'LALALALA', code });
+
+    const [messageReceived, setMessageReceived] = useState("");
+
+    useEffect(() => {
+        socket.on("receive_message", (data) => {
+            setMessageReceived(data.message);
+        });
+    }, [socket]);
+
+
     if(JSON.parse(xhr.response).response === -1) {
         return(
             //page does not exist
@@ -24,7 +40,10 @@ const Room = () => {
         );
     } else {
         return (
-            <MeetCard/>
+            <>
+                <MeetCard/>
+                {messageReceived}
+            </>
         );
     }
 };
