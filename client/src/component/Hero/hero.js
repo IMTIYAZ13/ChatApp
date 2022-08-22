@@ -1,6 +1,5 @@
 import './hero.css'
 import * as React from 'react';
-// import {useState} from 'react';
 import { Button, Container } from "@mui/material";
 import { createTheme } from "@mui/material/styles";
 
