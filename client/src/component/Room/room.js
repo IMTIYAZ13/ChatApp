@@ -4,6 +4,10 @@ import MeetCard from './Card/card';
 import DNE from "../DNE/dne";
 import { useState, useEffect } from 'react';
 import io from 'socket.io-client';
+import ChatBubbleIcon from '@mui/icons-material/ChatBubble';
+import MarkChatUnreadIcon from '@mui/icons-material/MarkChatUnread';
+import ChatBubbleOutlineIcon from '@mui/icons-material/ChatBubbleOutline';
+import styles from './Room.module.css';
 
 const socket = io('/');
 
@@ -42,6 +46,9 @@ const Room = () => {
         return (
             <>
                 <MeetCard/>
+                <ChatBubbleOutlineIcon name="open_chat" className={styles.hidden}/>
+                <ChatBubbleIcon name="chat"/>
+                <MarkChatUnreadIcon name="new_chat" className={styles.hidden}/>
                 {messageReceived}
             </>
         );

@@ -14,11 +14,12 @@ import MenuItem from '@mui/material/MenuItem';
 import { createTheme } from "@mui/material/styles";
 import SmartDisplayOutlinedIcon from '@mui/icons-material/SmartDisplayOutlined';
 import CssBaseline from '@mui/material/CssBaseline';
-import { ThemeProvider } from "@mui/material";
+import {Link, ThemeProvider} from "@mui/material";
 import {useEffect, useState} from "react";
+import {useNavigate} from "react-router-dom";
 
-const pages = ['Products', 'Pricing', 'Blog'];
-const settings = ['Profile', 'Account', 'Dashboard', 'Logout'];
+const pages = ['Dashboard', 'About us'];
+const settings = ['Profile', 'Dashboard', 'Logout'];
 
 const darkTheme = createTheme({
     palette: {
@@ -27,6 +28,9 @@ const darkTheme = createTheme({
 });
 
 const ResponsiveAppBar = () => {
+
+    const navigate = useNavigate();
+
     const [anchorElNav, setAnchorElNav] = React.useState(null);
     const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -52,7 +56,6 @@ const ResponsiveAppBar = () => {
         const getData = async () => {
             const response = await fetch(`/api/getDp/${localStorage.getItem('token')}`);
             const data = await response.json();
-            console.log("data ", data);
             set_user_img_id(data.user_image_id);
         }
         if (user === null) {
@@ -60,6 +63,21 @@ const ResponsiveAppBar = () => {
             setUser(0);
         }
     }, [user, user_img_id]);
+
+    const handleLogout = () => {
+        // console.log('Logout');
+        localStorage.removeItem('token');
+        navigate('/login');
+    }
+
+    const handleDashboard = () => {
+        navigate("/");
+    }
+
+    const handleProfile = () => {
+        console.log("On profile link!");
+        navigate('/profile');
+    }
 
     return (
         <ThemeProvider theme={darkTheme}>
@@ -154,7 +172,7 @@ const ResponsiveAppBar = () => {
                         </Box>
 
                         <Box sx={{ flexGrow: 0 }}>
-                            <Tooltip title="Options ...">
+                            <Tooltip title="Options">
                                 <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                                     <Avatar alt="Remy Sharp" src={`../../../user_images/${user_img_id}.png`} />
                                 </IconButton>
@@ -177,7 +195,22 @@ const ResponsiveAppBar = () => {
                             >
                                 {settings.map((setting) => (
                                     <MenuItem key={setting} onClick={handleCloseUserMenu}>
-                                        <Typography textAlign="center">{setting}</Typography>
+                                        <Typography textAlign="center"
+                                                    name={setting}
+                                                    onClick = { (event) => {
+                                                            let value = event.target.getAttribute('name');
+                                                            if (value === "Logout") {
+                                                                handleLogout();
+                                                            } else if (value === "Dashboard") {
+                                                                handleDashboard();
+                                                            } else {
+                                                                handleProfile();
+                                                            }
+                                                        }
+                                                    }
+                                        >
+                                            {setting}
+                                        </Typography>
                                     </MenuItem>
                                 ))}
                             </Menu>
